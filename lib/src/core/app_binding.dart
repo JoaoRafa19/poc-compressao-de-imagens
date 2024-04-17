@@ -8,6 +8,6 @@ class MainBinding extends ApplicationBindings {
   @override
   List<Bind<Object>> bindings() => [
         Bind.lazySingleton((i) => RestClient(Env.backendBaseUrl)),
-        Bind.lazySingleton<ImageRepository>((i) => ImageRepositoryImpl()),
+        Bind.lazySingleton<ImageRepository>((i) => ImageRepositoryImpl(i())),
       ];
 }

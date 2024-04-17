@@ -1,6 +1,5 @@
 import 'package:dio/io.dart';
 import 'package:dio/dio.dart';
-import 'package:poc_compressao/src/core/enviroment.dart';
 import 'package:poc_compressao/src/core/local_storage_constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +13,6 @@ class RestClient extends DioForNative {
               headers: {
                 'Accept': 'application/json',
                 'Accept-Language': 'pt-BR',
-                
               }),
         ) {
     interceptors.addAll([
@@ -22,6 +20,7 @@ class RestClient extends DioForNative {
         requestBody: true,
         responseBody: true,
       ),
+      AuthInterceptor(),
     ]);
   }
   RestClient get auth {
@@ -45,16 +44,13 @@ final class AuthInterceptor extends Interceptor {
     if (extra case {'DIO_AUTH_KEY': true}) {
       final sp = await SharedPreferences.getInstance();
       final token = sp.getString(LocalStorageConstants.accessToken);
-      const envToken = String.fromEnvironment('TOKEN', defaultValue: "");
-      
-      headers.addAll({
-        authHeaderKey:
-            'Bearer ${token ?? envToken}'
-      });
+      const envToken =
+          bool.hasEnvironment("TOKEN") ? String.fromEnvironment("TOKEN") : null;
+      if (envToken != null) {
+        headers.addAll({authHeaderKey: 'Bearer ${token ?? envToken}'});
+      }
     }
+    headers.remove("DIO_AUTH_KEY");
     handler.next(options);
-    super.onRequest(options, handler);
   }
 }
-
-
