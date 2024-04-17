@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:typed_data';
 import 'package:poc_compressao/src/model/image_model.dart';
 import 'package:poc_compressao/src/repositories/image_repository.dart';
@@ -20,6 +21,7 @@ class CameraConfirmController {
       final result = await imageRepository.saveImage(model);
       pathRemoteStorage.set(result);
     } on Exception catch (e) {
+      log("Erro ao enviar imagem", error: e);
       errorMessage.set("Erro ao salvar a foto");
     }
     loading.set(false);

@@ -78,8 +78,8 @@ class _CameraPageState extends State<CameraPage> {
                   height: 10,
                 ),
                 Text(
-                  '${controller.selectedResulution.value.name.toUpperCase()}',
-                  style: TextStyle(
+                  controller.selectedResulution.value.name.toUpperCase(),
+                  style: const TextStyle(
                     fontSize: 25,
                     fontWeight: FontWeight.w500,
                     color: Colors.black,
@@ -117,7 +117,7 @@ class _CameraPageState extends State<CameraPage> {
                             }),
                       );
                     }),
-                    Spacer(),
+                    const Spacer(),
                     Watch((context) {
                       return FutureBuilder(
                         future: cameraController.initialize(),

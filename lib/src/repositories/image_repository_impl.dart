@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
 
 import 'package:dio/dio.dart';
 import 'package:poc_compressao/src/core/rest_client.dart';
@@ -87,7 +86,7 @@ class ImageRepositoryImpl implements ImageRepository {
           'directory': 'comprimir',
           'container': 'images'
         });
-        final token = String.fromEnvironment('TOKEN');
+        const token = String.fromEnvironment('TOKEN');
         final options = Options(
             persistentConnection: true,
             headers: {

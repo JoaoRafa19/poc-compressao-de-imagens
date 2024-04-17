@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -22,7 +23,7 @@ class HomeController {
     try {
       loading.set(true);
       final savedImages = await imageRepository.getAllImages();
-      print(savedImages);
+      log("Saved images, : ${savedImages.toSet()}");
       images.value = savedImages;
       loading.set(false);
     } catch (e) {
