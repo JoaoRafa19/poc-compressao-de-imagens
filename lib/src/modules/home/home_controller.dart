@@ -87,6 +87,32 @@ class HomeController {
               "${image.imageName.split(".").first}_65_${image.imageName.split(".").last}");
 
       sendImages.add(quality65);
+      final quality50 = image.copyWith(
+          base64Image:
+              await compress(Uint8List.fromList(image.base64Image), 50),
+          imageName:
+              "${image.imageName.split(".").first}_50_${image.imageName.split(".").last}");
+
+      sendImages.add(quality50);
+      final quality40 = image.copyWith(
+          base64Image:
+              await compress(Uint8List.fromList(image.base64Image), 40),
+          imageName:
+              "${image.imageName.split(".").first}_40_${image.imageName.split(".").last}");
+      sendImages.add(quality40);
+      final quality30 = image.copyWith(
+          base64Image:
+              await compress(Uint8List.fromList(image.base64Image), 30),
+          imageName:
+              "${image.imageName.split(".").first}_30_${image.imageName.split(".").last}");
+      sendImages.add(quality30);
+      final quality20 = image.copyWith(
+          base64Image:
+              await compress(Uint8List.fromList(image.base64Image), 20),
+          imageName:
+              "${image.imageName.split(".").first}_20_${image.imageName.split(".").last}");
+
+      sendImages.add(quality20);
     }
     messages.value = 'enviando...';
     final result = await imageRepository.sendImages(sendImages,

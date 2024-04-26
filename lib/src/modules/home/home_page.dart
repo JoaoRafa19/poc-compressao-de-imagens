@@ -85,6 +85,13 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         toolbarHeight: 10,
       ),
+      drawer: Drawer(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [Text("1.1.0+5"), Text("Patch 4")],
+        ),
+      ),
       body: Align(
         alignment: Alignment.topCenter,
         child: Container(
@@ -173,21 +180,22 @@ class _HomePageState extends State<HomePage> {
                     child: SizedBox(
                       height: 48,
                       child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8)),
-                          ),
-                          onPressed: () async {
-                            await Navigator.of(context).pushNamed('/camera');
-                            await controller.init();
-                          },
-                          child: const Text(
-                            'TIRAR FOTOS',
-                          )),
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8)),
+                        ),
+                        onPressed: () async {
+                          await Navigator.of(context).pushNamed('/camera');
+                          await controller.init();
+                        },
+                        child: const Text(
+                          'CAPTURA',
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
