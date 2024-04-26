@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:poc_compressao/src/core/enviroment.dart';
 import 'package:poc_compressao/src/core/rest_client.dart';
 import 'package:poc_compressao/src/model/image_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -86,23 +87,20 @@ class ImageRepositoryImpl implements ImageRepository {
           'directory': 'comprimir',
           'container': 'images'
         });
-        const token = String.fromEnvironment('TOKEN');
         final options = Options(
             persistentConnection: true,
             headers: {
               "Content-Type": "multipart/form-data;charset",
               "Accept-Language": "pt-BR",
               "Accept": "application/json",
-              "Authorization": token
+              "Authorization": "Bearer ${Env.token}"
             },
             extra: {"DIO_AUTH_KEY": true},
             sendTimeout: const Duration(minutes: 1));
         try {
           final dio = Dio()..interceptors.add(AuthInterceptor());
-          final response = await dio.post(
-              "https://apimw.traderesult.app/v1/files",
-              data: formData,
-              options: options);
+          final response = await dio.post("${Env.backendBaseUrl}/v1/files",
+              data: formData, options: options);
           response.statusCode == 200 ? succeses++ : fails++;
           if (response.statusCode == 200) {
             sp.remove(image.imageId ?? "");
