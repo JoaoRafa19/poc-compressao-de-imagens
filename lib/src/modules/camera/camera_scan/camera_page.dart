@@ -1,10 +1,8 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_getit/flutter_getit.dart';
 import 'package:poc_compressao/src/modules/camera/camera_controller.dart';
@@ -72,7 +70,7 @@ class _CameraPageState extends State<CameraPage> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Container(
+                        child: SizedBox(
                           width: sizeOf.width,
                           child: CameraPreview(
                             cameraController,
@@ -241,10 +239,9 @@ class _CameraPageState extends State<CameraPage> {
       controller.isTakingPicture.value = true;
       final nav = Navigator.of(context);
       final foto = await cameraController.takePicture();
-      controller.isTakingPicture.value = false;
+      controller.isTakingPicture.set(false);
       nav.pushNamed('/camera/confirm', arguments: foto);
     } on Exception catch (e, s) {
-      controller.isTakingPicture.value = false;
       log("Taking picture error", error: e, stackTrace: s);
     }
   }

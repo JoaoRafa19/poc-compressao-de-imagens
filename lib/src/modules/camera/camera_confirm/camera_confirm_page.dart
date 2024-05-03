@@ -10,7 +10,7 @@ import 'package:poc_compressao/src/modules/camera/camera_confirm/camera_confirm_
 import 'package:signals_flutter/signals_flutter.dart';
 
 class CameraConfirmPage extends StatefulWidget {
-  CameraConfirmPage({super.key});
+  const CameraConfirmPage({super.key});
 
   @override
   State<CameraConfirmPage> createState() => _CameraConfirmPageState();

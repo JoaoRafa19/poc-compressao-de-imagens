@@ -13,5 +13,5 @@ class CameraConfirmRouter extends FlutterGetItModulePageRouter {
       ];
 
   @override
-  WidgetBuilder get view => (_) => CameraConfirmPage();
+  WidgetBuilder get view => (_) => const CameraConfirmPage();
 }
