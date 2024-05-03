@@ -78,92 +78,46 @@ class _CameraPageState extends State<CameraPage> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  controller.selectedResulution.value.name.toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 25,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Watch((context) {
-                      return RotatedBox(
-                        quarterTurns: -1,
-                        child: Slider(
-                            min: 0,
-                            max: ResolutionPreset.values.length - 1 / 1.0,
-                            divisions: ResolutionPreset.values.length - 1,
-                            label: controller.selectedResulution.value.name,
-                            value:
-                                controller.selectedResulution.value.index / 1.0,
-                            onChanged: (val) {
-                              if (val >= 0 &&
-                                  val < ResolutionPreset.values.length) {
-                                final value = val.toInt();
-                                controller.selectedResulution.value =
-                                    ResolutionPreset.values[value];
-                                setState(() {
-                                  cameraController = CameraController(
-                                      description,
-                                      controller.selectedResulution.value);
-                                });
-                              }
-                            }),
-                      );
-                    }),
-                    const Spacer(),
-                    Watch((context) {
-                      return FutureBuilder(
-                        future: cameraController.initialize(),
-                        builder: (context, snapshot) {
-                          switch (snapshot) {
-                            case AsyncSnapshot(
-                                connectionState: ConnectionState.waiting ||
-                                    ConnectionState.active
-                              ):
-                              return const Expanded(
-                                child: Center(
-                                  child: CircularProgressIndicator(),
+                const Spacer(),
+                FutureBuilder(
+                  future: cameraController.initialize(),
+                  builder: (context, snapshot) {
+                    switch (snapshot) {
+                      case AsyncSnapshot(
+                          connectionState:
+                              ConnectionState.waiting || ConnectionState.active
+                        ):
+                        return const Expanded(
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
+                      case AsyncSnapshot(connectionState: ConnectionState.done):
+                        if (cameraController.value.isInitialized) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: SizedBox(
+                              width: sizeOf.width * .5,
+                              child: CameraPreview(
+                                cameraController,
+                                child: DottedBorder(
+                                  borderType: BorderType.RRect,
+                                  strokeWidth: 4,
+                                  strokeCap: StrokeCap.square,
+                                  color: Colors.orange,
+                                  radius: const Radius.circular(16),
+                                  dashPattern: const [1, 10, 1, 3],
+                                  child: const SizedBox.expand(),
                                 ),
-                              );
-                            case AsyncSnapshot(
-                                connectionState: ConnectionState.done
-                              ):
-                              if (cameraController.value.isInitialized) {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: SizedBox(
-                                    width: sizeOf.width * .5,
-                                    child: CameraPreview(
-                                      cameraController,
-                                      child: DottedBorder(
-                                        borderType: BorderType.RRect,
-                                        strokeWidth: 4,
-                                        strokeCap: StrokeCap.square,
-                                        color: Colors.orange,
-                                        radius: const Radius.circular(16),
-                                        dashPattern: const [1, 10, 1, 3],
-                                        child: const SizedBox.expand(),
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              }
-                          }
-                          return const Center(
-                            child: Text('Erro ao carregar câmera'),
+                              ),
+                            ),
                           );
-                        },
-                      );
-                    }),
-                  ],
+                        }
+                    }
+                    return const Center(
+                      child: Text('Erro ao carregar câmera'),
+                    );
+                  },
                 ),
                 const SizedBox(
                   height: 32,

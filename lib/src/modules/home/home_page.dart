@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_getit/flutter_getit.dart';
 import 'package:poc_compressao/src/modules/home/home_controller.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -84,12 +85,37 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 10,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.menu,
+            color: Colors.black,
+          ),
+          onPressed: () {
+            ScaffoldMessenger.of(context).showMaterialBanner(
+              MaterialBanner(
+                  content: const Text(
+                    "1.1.0+5\nPatch 7",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () {
+                          ScaffoldMessenger.of(context).clearMaterialBanners();
+                        },
+                        child: const Text("Fechar")),
+                  ]),
+            );
+          },
+        ),
       ),
-      drawer: Drawer(
+      drawer: const Drawer(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
-          children: [Text("1.1.0+5"), Text("Patch 4")],
+          children: [Text("1.1.0+5"), Text("Patch 7")],
         ),
       ),
       body: Align(
