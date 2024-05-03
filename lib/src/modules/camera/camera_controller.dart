@@ -3,5 +3,5 @@ import 'package:signals_flutter/signals_flutter.dart';
 
 class CameraPageController {
   final isTakingPicture = signal(false);
-  final selectedResulution = signal(ResolutionPreset.ultraHigh);
+  final selectedResulution = signal(ResolutionPreset.veryHigh);
 }
