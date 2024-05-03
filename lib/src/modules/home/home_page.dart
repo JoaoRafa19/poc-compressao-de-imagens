@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_getit/flutter_getit.dart';
 import 'package:poc_compressao/src/modules/home/home_controller.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -177,9 +179,81 @@ class _HomePageState extends State<HomePage> {
                                               Icons.delete,
                                               color: Colors.red,
                                             ),
-                                            onPressed: () {
-                                              controller.removeImage(controller
-                                                  .images.value?[index]);
+                                            onPressed: () async {
+                                              await showAdaptiveDialog(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return AlertDialog.adaptive(
+                                                        backgroundColor:
+                                                            Colors.white,
+                                                        shadowColor:
+                                                            Colors.white,
+                                                        actionsAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        content: const Padding(
+                                                          padding: EdgeInsets
+                                                              .symmetric(
+                                                                  vertical:
+                                                                      8.0),
+                                                          child: Text.rich(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: TextStyle(),
+                                                            TextSpan(children: [
+                                                              TextSpan(
+                                                                  text:
+                                                                      "Tem certeza que deseja excluir essa foto?\n"),
+                                                              TextSpan(
+                                                                  text:
+                                                                      "Ela será removida permanentemente.")
+                                                            ]),
+                                                          ),
+                                                        ),
+                                                        actions: [
+                                                          Row(
+                                                            children: [
+                                                              Expanded(
+                                                                child: SizedBox(
+                                                                  height: 48,
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                            shape:
+                                                                                const RoundedRectangleBorder()),
+                                                                    onPressed:
+                                                                        () {
+                                                                      controller.removeImage(controller
+                                                                          .images
+                                                                          .value?[index]);
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    },
+                                                                    child: const Text(
+                                                                        "Sim"),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Expanded(
+                                                                child: SizedBox(
+                                                                  height: 48,
+                                                                  child: OutlinedButton(
+                                                                      style: ElevatedButton.styleFrom(shape: const RoundedRectangleBorder()),
+                                                                      onPressed: () {
+                                                                        Navigator.of(context)
+                                                                            .pop();
+                                                                      },
+                                                                      child: const Text("Não")),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          )
+                                                        ]);
+                                                  });
                                             },
                                           )),
                                     ),
