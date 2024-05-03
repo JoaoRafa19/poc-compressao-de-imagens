@@ -6,6 +6,8 @@ abstract interface class ImageRepository {
   Future<List<ImageModel>> getAllImages();
   Future<List<String>> getIds();
 
-  Future<({int succes, int fail})> sendImages(
-      List<ImageModel> images, {Function(int, int)? progress});
+  Future<bool> removeImage(ImageModel image);
+
+  Future<({int succes, int fail})> sendImages(List<ImageModel> images,
+      {Function(int, int)? progress});
 }

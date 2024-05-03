@@ -32,6 +32,14 @@ class HomeController {
     }
   }
 
+  Future<void> removeImage(ImageModel? image) async {
+    if (image == null) return;
+    loading.set(true);
+    await imageRepository.removeImage(image);
+    init();
+    loading.set(false);
+  }
+
   Future<void> sendImages() async {
     loading.value = true;
     final sendImages = <ImageModel>[];

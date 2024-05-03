@@ -2,7 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_getit/flutter_getit.dart';
 import 'package:poc_compressao/src/modules/home/home_controller.dart';
 import 'package:signals_flutter/signals_flutter.dart';
@@ -59,6 +59,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.init();
     });
@@ -82,151 +87,201 @@ class _HomePageState extends State<HomePage> {
       }
     });
     final sizeOf = MediaQuery.sizeOf(context);
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 10,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.menu,
-            color: Colors.black,
-          ),
-          onPressed: () {
-            ScaffoldMessenger.of(context).showMaterialBanner(
-              MaterialBanner(
-                  content: const Text(
-                    "1.1.0+5\nPatch 7",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
+    return OrientationBuilder(builder: (context, orientation) {
+      if (orientation == Orientation.landscape) {
+        return Container();
+      }
+      return Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 10,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.menu,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              ScaffoldMessenger.of(context).showMaterialBanner(
+                MaterialBanner(
+                    content: const Text(
+                      "1.1.0+5\nPatch 7",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                  ),
-                  actions: [
-                    ElevatedButton(
-                        onPressed: () {
-                          ScaffoldMessenger.of(context).clearMaterialBanners();
-                        },
-                        child: const Text("Fechar")),
-                  ]),
-            );
-          },
-        ),
-      ),
-      drawer: const Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [Text("1.1.0+5"), Text("Patch 7")],
-        ),
-      ),
-      body: Align(
-        alignment: Alignment.topCenter,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 1),
-          padding: const EdgeInsets.all(40),
-          width: sizeOf.width * .9,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-            border: Border(
-                top: BorderSide(), left: BorderSide(), right: BorderSide()),
-            color: Colors.white,
+                    actions: [
+                      ElevatedButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context)
+                                .clearMaterialBanners();
+                          },
+                          child: const Text("Fechar")),
+                    ]),
+              );
+            },
           ),
+        ),
+        drawer: const Drawer(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                  itemCount: controller.images.value?.length,
-                  itemBuilder: (context, index) {
-                    if (controller.images.value != null) {
-                      final imageList = Uint8List.fromList(
-                          controller.images.value![index].base64Image);
-                      return Card(
-                        child: Container(
-                            decoration: BoxDecoration(
-                                image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: MemoryImage(
-                                imageList,
-                              ),
-                            )),
-                            child: SizedBox.expand(
-                              child: Align(
-                                alignment: Alignment.topRight,
-                                child: Checkbox(
-                                  onChanged: (val) {
-                                    if (controller.images.value?[index] !=
-                                        null) {
-                                      var element = controller.images.value!
-                                          .removeAt(index);
-                                      element = element.copyWith(selected: val);
-                                      controller.images.value = [
-                                        element,
-                                        ...controller.images.value ?? []
-                                      ];
-                                    }
-                                  },
-                                  value: controller
-                                      .images.value?[index].isSelected,
-                                ),
-                              ),
-                            )),
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-              ),
-              const SizedBox(
-                height: 32,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 48,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                        onPressed: () async {
-                          await controller.sendImages();
-                        },
-                        child: const Text(
-                          'ENVIAR',
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: SizedBox(
-                      height: 48,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8)),
-                        ),
-                        onPressed: () async {
-                          await Navigator.of(context).pushNamed('/camera');
-                          await controller.init();
-                        },
-                        child: const Text(
-                          'CAPTURA',
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            children: [Text("1.1.0+5"), Text("Patch 7")],
           ),
         ),
-      ),
-    );
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: Container(
+            margin: const EdgeInsets.symmetric(vertical: 1),
+            padding: const EdgeInsets.all(40),
+            width: sizeOf.width * .9,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16), topRight: Radius.circular(16)),
+              border: Border(
+                  top: BorderSide(), left: BorderSide(), right: BorderSide()),
+              color: Colors.white,
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Expanded(
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                    ),
+                    itemCount: controller.images.value?.length,
+                    itemBuilder: (context, index) {
+                      if (controller.images.value != null) {
+                        final imageList = Uint8List.fromList(
+                            controller.images.value![index].base64Image);
+                        return Card(
+                          child: Container(
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: MemoryImage(
+                                  imageList,
+                                ),
+                              )),
+                              child: SizedBox.expand(
+                                child: Stack(
+                                  children: [
+                                    Visibility(
+                                      visible: controller.images.value?[index]
+                                              .isSelected ==
+                                          true,
+                                      child: Align(
+                                          alignment: Alignment.topLeft,
+                                          child: IconButton(
+                                            icon: const Icon(
+                                              Icons.delete,
+                                              color: Colors.red,
+                                            ),
+                                            onPressed: () {
+                                              controller.removeImage(controller
+                                                  .images.value?[index]);
+                                            },
+                                          )),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.topRight,
+                                      child: Checkbox(
+                                        onChanged: (val) {
+                                          if (controller.images.value?[index] !=
+                                              null) {
+                                            var element = controller
+                                                .images.value!
+                                                .removeAt(index);
+                                            element =
+                                                element.copyWith(selected: val);
+                                            controller.images.value = [
+                                              element,
+                                              ...controller.images.value ?? []
+                                            ];
+                                          }
+                                        },
+                                        value: controller
+                                            .images.value?[index].isSelected,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )),
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+                const SizedBox(
+                  height: 32,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 48,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          onPressed: () async {
+                            if (controller.images.value
+                                    ?.where((e) => e.isSelected == true)
+                                    .isEmpty ==
+                                true) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                      content: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.photo,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 16,
+                                  ),
+                                  Text("Nenhuma imagem selecionada"),
+                                ],
+                              )));
+                            }
+                            await controller.sendImages();
+                          },
+                          child: const Text(
+                            'ENVIAR',
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: SizedBox(
+                        height: 48,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8)),
+                          ),
+                          onPressed: () async {
+                            await Navigator.of(context).pushNamed('/camera');
+                            await controller.init();
+                          },
+                          child: const Text(
+                            'CAPTURA',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 }
 

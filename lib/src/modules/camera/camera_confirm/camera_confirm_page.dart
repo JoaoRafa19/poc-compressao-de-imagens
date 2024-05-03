@@ -4,14 +4,42 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_getit/flutter_getit.dart';
 import 'package:poc_compressao/src/modules/camera/camera_confirm/camera_confirm_controller.dart';
 import 'package:signals_flutter/signals_flutter.dart';
 
-class CameraConfirmPage extends StatelessWidget {
+class CameraConfirmPage extends StatefulWidget {
   CameraConfirmPage({super.key});
 
+  @override
+  State<CameraConfirmPage> createState() => _CameraConfirmPageState();
+}
+
+class _CameraConfirmPageState extends State<CameraConfirmPage> {
   final controller = Injector.get<CameraConfirmController>();
+
+  @override
+  initState() {
+    WidgetsFlutterBinding.ensureInitialized();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

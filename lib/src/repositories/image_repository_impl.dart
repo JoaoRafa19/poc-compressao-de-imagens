@@ -116,4 +116,12 @@ class ImageRepositoryImpl implements ImageRepository {
       return (succes: 0, fail: images.length);
     }
   }
+
+  @override
+  Future<bool> removeImage(ImageModel image) async {
+    final sp = await SharedPreferences.getInstance();
+    return ((image.imageId == null) ^ (sp.get(image.imageId!) == null))
+        ? false
+        : await sp.remove(image.imageId!);
+  }
 }
