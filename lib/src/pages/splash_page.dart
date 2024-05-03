@@ -12,7 +12,7 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       final nav = Navigator.of(context);
-      await Future.delayed(const Duration(seconds: 3));
+      WidgetsFlutterBinding.ensureInitialized();
       nav.pushReplacementNamed('/home');
     });
     super.initState();
