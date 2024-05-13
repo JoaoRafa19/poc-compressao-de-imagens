@@ -1,16 +1,19 @@
 # poc_compressao
 
-A new Flutter project.
+Uma prova de conceito para comprimir fotos antes de enviar para o backend
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Funcionalidades
+- [x] Tirar fotos
+- [x] Escolher a resolução (Removido) 
+- [x] Conferir a foto antes de enviar
+- [x] Selecionar as fotos que vão ser enviadas
+- [x] Excluir fotos da memória
+- [x] Persistencia de dados locais
+- [x] Compressão das fotos antes de enviar
+    - [x] Break-points de compressão 50% e 80% de qualidade
+    - [x] Compressão de acordo com o tamanho da foto
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [ ] Compressão em Isolate
+- [ ] Envio em isolate
+- [x] Camera reativa à orientação do telefone
