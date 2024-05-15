@@ -19,6 +19,8 @@ class HomeController {
   final loading = signal<bool>(false);
   final sendProgress = signal<double?>(0.0);
 
+  static const minDimension = 1920 * 1080;
+
   Future<void> init() async {
     try {
       loading.set(true);
@@ -61,8 +63,7 @@ class HomeController {
               (ImageInfo info, bool _) => completer.complete(info.image)));
       final int width = (await completer.future).width;
       final int height = (await completer.future).height;
-      final int max = width > height ? width : height;
-      final int quality = max >= 1080 ? 50 : 80;
+      final int quality = (width * height) >= minDimension ? 50 : 80;
       var compressedImage = await FlutterImageCompress.compressWithList(
         uint8list,
         minHeight: height,

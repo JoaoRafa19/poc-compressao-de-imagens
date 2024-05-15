@@ -68,17 +68,14 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller.init();
     });
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     controller.images.listen(context, () {
       setState(() {});
     });
     controller.erros.listen(context, () {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text("${controller.erros.value}")));
+      if (controller.erros.value != null) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text("${controller.erros.value}")));
+      }
     });
     controller.loading.listen(context, () {
       if (controller.loading.value) {
@@ -87,6 +84,11 @@ class _HomePageState extends State<HomePage> {
         overlay.remove();
       }
     });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final sizeOf = MediaQuery.sizeOf(context);
     return OrientationBuilder(builder: (context, orientation) {
       if (orientation == Orientation.landscape) {
